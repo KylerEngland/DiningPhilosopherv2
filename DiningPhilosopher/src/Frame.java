@@ -8,7 +8,7 @@ import java.awt.event.*;
 
 public class Frame extends JFrame {
     // Philosopher[] philosophers = new Philosopher[6];
-    // Vector<MonitorPhilosopher> monitorPhilosophers = new Vector<>(6);
+    Vector<MonitorPhilosopher> monitorPhilosophers = new Vector<>(6);
     // Fork[] forks = new Fork[5];
     String dinnerMode;
 
