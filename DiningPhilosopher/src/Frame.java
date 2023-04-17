@@ -125,36 +125,36 @@ public class Frame extends JFrame {
         // Add the scroll pane to the frame
         this.add(scrollPane, BorderLayout.EAST);
         // Create 5 Forks
-        for (int index = 0; index < 5; index++) {
-            forks[index] = new Fork();
-        }
+        // for (int index = 0; index < 5; index++) {
+        //     forks[index] = new Fork();
+        // }
 
         // Create the 5 Philosophers
         panel.setLayout(null);
         String selectedValue = (String) ticksPerSecondDropdown.getSelectedItem();
         int selectedInt = Integer.parseInt(selectedValue);
-        for (int index = 1; index <= 5; index++) {
-            if (dinnerMode == "Monitor Dinner") {
-                monitorPhilosophers.add(index, new MonitorPhilosopher(index, panel, outputArea, selectedInt, this));
-            } else if (dinnerMode == "Semaphore Dinner") {
-                philosophers[index] = new Philosopher(index, panel, outputArea, selectedInt, this, dinnerMode);
-            }
-        }
+        // for (int index = 1; index <= 5; index++) {
+        //     if (dinnerMode == "Monitor Dinner") {
+        //         monitorPhilosophers.add(index, new MonitorPhilosopher(index, panel, outputArea, selectedInt, this));
+        //     } else if (dinnerMode == "Semaphore Dinner") {
+        //         philosophers[index] = new Philosopher(index, panel, outputArea, selectedInt, this, dinnerMode);
+        //     }
+        // }
 
         Thread threads[] = new Thread[6];
 
         startButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
 
-                for (int index = 1; index <= 5; index++) {
-                    if (dinnerMode == "Monitor Dinner") {
-                        threads[index] = new Thread(monitorPhilosophers.get(index));
-                        threads[index].start();
-                    } else if (dinnerMode == "Semaphore Dinner") {
-                        threads[index] = new Thread(philosophers[index]);
-                        threads[index].start();
-                    }
-                }
+                // for (int index = 1; index <= 5; index++) {
+                //     if (dinnerMode == "Monitor Dinner") {
+                //         threads[index] = new Thread(monitorPhilosophers.get(index));
+                //         threads[index].start();
+                //     } else if (dinnerMode == "Semaphore Dinner") {
+                //         threads[index] = new Thread(philosophers[index]);
+                //         threads[index].start();
+                //     }
+                // }
             }
         });
         stopButton.addActionListener(new ActionListener() {
@@ -171,7 +171,7 @@ public class Frame extends JFrame {
         this.add(panel);
     }
 
-    public Fork getFork(int index) {
-        return forks[index];
-    }
+    // public Fork getFork(int index) {
+    //     return forks[index];
+    // }
 }
