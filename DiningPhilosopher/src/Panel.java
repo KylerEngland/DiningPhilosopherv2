@@ -1,7 +1,12 @@
 
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
@@ -19,7 +24,7 @@ public class Panel extends JPanel {
     private JLabel p4NameLabel = new JLabel("P4");
     private JLabel p5NameLabel = new JLabel("P5");
 
-    public Panel() {
+    public Panel() throws IOException {
         // Set Font 
         p1StateLabel.setFont(new Font("Serif", Font.BOLD, 20));
         p2StateLabel.setFont(new Font("Serif", Font.BOLD, 20));
@@ -53,6 +58,25 @@ public class Panel extends JPanel {
         this.add(p3NameLabel);
         this.add(p4NameLabel);
         this.add(p5NameLabel);
+        // Draw Philosophers 
+        BufferedImage image = null;
+        File file = new File("images/philsopher.png");
+        //File file = new File("C:\\Users\\danie\\OneDrive\\Documents\\IWU\\CIS-425\\DiningPhilosopher\\DiningPhilosophers\\images\\philsopher.png");
+        image = ImageIO.read(file);
+        Image resultingImage = image.getScaledInstance(125, 150, Image.SCALE_DEFAULT);
+        JLabel label = new JLabel(new ImageIcon(resultingImage));
+        this.setLayout(null);
+        //P5
+        label.setBounds(90, 210, 125, 150);
+        //P1
+        label.setBounds(290, 50, 125, 150);
+        //P4
+        label.setBounds(150, 440, 125, 150);
+        //P3
+        label.setBounds(420, 440, 125, 150);
+        // P2
+        label.setBounds(485, 210, 125, 150);
+        this.add(label);
     }
 
     public void setStateText(String newState, int id){
