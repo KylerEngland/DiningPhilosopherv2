@@ -1,5 +1,7 @@
 public class App {
     public static void main(String[] args) throws Exception {
-        System.out.println("Hello, World!");
+        Frame frame = new Frame();
+        frame.pack();
+        frame.setVisible(true);
     }
 }
