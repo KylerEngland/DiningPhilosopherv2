@@ -60,23 +60,32 @@ public class Panel extends JPanel {
         this.add(p5NameLabel);
         // Draw Philosophers 
         BufferedImage image = null;
-        File file = new File("DiningPhilosopher\\images\\philosopher.png");
+        //File file = new File("images/philosopher.png");
+        File file = new File("C:\\Users\\danie\\OneDrive\\Documents\\IWU\\CIS-425\\DiningPhilosopherv2\\DiningPhilosopher\\images\\philosopher.png");
         //File file = new File("C:\\Users\\danie\\OneDrive\\Documents\\IWU\\CIS-425\\DiningPhilosopher\\DiningPhilosophers\\images\\philsopher.png");
         image = ImageIO.read(file);
         Image resultingImage = image.getScaledInstance(125, 150, Image.SCALE_DEFAULT);
-        JLabel label = new JLabel(new ImageIcon(resultingImage));
+        JLabel label1 = new JLabel(new ImageIcon(resultingImage));
+        JLabel label2 = new JLabel(new ImageIcon(resultingImage));
+        JLabel label3 = new JLabel(new ImageIcon(resultingImage));
+        JLabel label4 = new JLabel(new ImageIcon(resultingImage));
+        JLabel label5 = new JLabel(new ImageIcon(resultingImage));
         this.setLayout(null);
         //P5
-        label.setBounds(90, 210, 125, 150);
+        label1.setBounds(90, 210, 125, 150);
         //P1
-        label.setBounds(290, 50, 125, 150);
+        label2.setBounds(290, 50, 125, 150);
         //P4
-        label.setBounds(150, 440, 125, 150);
+        label3.setBounds(150, 440, 125, 150);
         //P3
-        label.setBounds(420, 440, 125, 150);
+        label4.setBounds(420, 440, 125, 150);
         // P2
-        label.setBounds(485, 210, 125, 150);
-        this.add(label);
+        label5.setBounds(485, 210, 125, 150);
+        this.add(label1);
+        this.add(label2);
+        this.add(label3);
+        this.add(label4);
+        this.add(label5);
     }
 
     public void setStateText(String newState, int id){
