@@ -57,7 +57,7 @@ public class SemaphorePhilosopher implements Runnable{
     private void take_forks(int i) throws InterruptedException {
         mutex.acquire();
         System.out.println("Setting p" + (i+1) + " state to Hungry");
-        //randomizeTicksRemaining();
+        randomizeTicksRemaining();
         state[i]=HUNGRY;
         setState(HUNGRY);
         test(i);
@@ -67,9 +67,10 @@ public class SemaphorePhilosopher implements Runnable{
     private void put_forks(int i) throws InterruptedException {
         mutex.acquire();
         System.out.println("Setting p" + (i+1) + " state to Thinking");
+        randomizeTicksRemaining(); 
         state[i]=THINKING;
         setState(THINKING);
-        randomizeTicksRemaining();
+        
         test(LEFT);
         test(RIGHT);
         mutex.release();
@@ -77,9 +78,9 @@ public class SemaphorePhilosopher implements Runnable{
     private void test(int i){
         if(state[i]==HUNGRY && state[LEFT]!=EATING && state[RIGHT]!=EATING){
             System.out.println("Setting p" + (i+1) + "  state to eating");
+            randomizeTicksRemaining();
             state[i]=EATING;
             setState(EATING);
-            randomizeTicksRemaining();
             s[i].release();
         }
     }
@@ -107,17 +108,9 @@ public class SemaphorePhilosopher implements Runnable{
         panel.setStateText(newStateString, i+1);
     }
     private void tick() throws InterruptedException {
-        // if(ticksRemaining<=0){
-        //     randomizeTicksRemaining();
-        // }
         if(state[i]==THINKING){
             ticksRemaining--;
             outputArea.append("Philosopher " + (i+1) + " is thinking and \n wants to think for "+ ticksRemaining +" tick(s).\n");
-            // if(ticksRemaining<=0){
-            //     state[i]=HUNGRY;
-            //     setState(HUNGRY);
-            //     System.out.println("Setting p" + (i+1) + " state to Hungry");
-            // }
         } 
         if(state[i]==HUNGRY || (ticksRemaining<=0 && state[i]==THINKING)) take_forks(i);
         if(state[i]==EATING){
