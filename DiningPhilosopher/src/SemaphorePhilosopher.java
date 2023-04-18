@@ -28,7 +28,7 @@ public class SemaphorePhilosopher implements Runnable{
     JTextArea outputArea;
     Semaphore mutex = new Semaphore(1);
     
-    SemaphorePhilosopher(int i, Panel panel, int ticksPerSecond, JTextArea outputArea){
+    public SemaphorePhilosopher(int i, Panel panel, int ticksPerSecond, JTextArea outputArea){
         this.i=i; 
         this.panel = panel; 
         this.ticksPerSecond = ticksPerSecond; 
@@ -83,6 +83,8 @@ public class SemaphorePhilosopher implements Runnable{
             s[i].release();
         }
     }
+
+
     private void randomizeTicksRemaining(){
         int min = 1; 
         int max = 15; 
@@ -99,7 +101,7 @@ public class SemaphorePhilosopher implements Runnable{
                 newStateString = "Hungry";
                 break;
             case EATING: 
-                newStateString = "Eatting";
+                newStateString = "Eating";
                 break;
         }
         panel.setStateText(newStateString, i+1);
@@ -126,6 +128,10 @@ public class SemaphorePhilosopher implements Runnable{
             put_forks(i);
         }
 
+    }
+
+    public void setTicksPerSecond(int ticksPerSecond) {
+        this.ticksPerSecond = ticksPerSecond;
     }
     
 }
