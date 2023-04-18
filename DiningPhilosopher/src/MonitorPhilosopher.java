@@ -46,20 +46,16 @@ public class MonitorPhilosopher implements Runnable {
         setState(THINKING);
         test(getLeft(i));
         test(getRight(i));
-        // synchronized(lock){
-        //     lock.notifyAll();
-        // }
     }
 
     public synchronized void test(int i) {
         if (MonitorPhilosopher.state[i] == HUNGRY && MonitorPhilosopher.state[getLeft(i)] != EATING
                 && MonitorPhilosopher.state[getRight(i)] != EATING) {
                     MonitorPhilosopher.state[i] = EATING;
+                    setState(EATING);
                     synchronized(lock) {
                 if (!lock.isLocked() && !lock.hasQueuedThreads()) {
-                    setState(EATING);
                     lock.notifyAll();
-                    // lock.lock();
                 }
             }
         }
