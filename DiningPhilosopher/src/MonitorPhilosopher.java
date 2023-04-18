@@ -68,14 +68,14 @@ public class MonitorPhilosopher implements Runnable {
                 panel.setStateText("hungry", i);
             }
             ticksRemaining--;
-            outputArea.append("Philosopher " + i + " is thinking and \n wants to think for "+ ticksRemaining +" tick(s).\n");
+            outputArea.append("Philosopher " + (i+1) + " is thinking and \n wants to think for "+ ticksRemaining +" tick(s).\n");
         } else if(state[i]==HUNGRY) {
             take_forks(i);
         }
 
         if(state[i]==EATING){
             ticksRemaining--;
-            outputArea.append("Philosopher " + i + " eats and \n wants to eat for "+ ticksRemaining +" tick(s).\n");
+            outputArea.append("Philosopher " + (i+1) + " eats and \n wants to eat for "+ ticksRemaining +" tick(s).\n");
         }
         
         
