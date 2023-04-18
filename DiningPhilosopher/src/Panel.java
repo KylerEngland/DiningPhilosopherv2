@@ -60,9 +60,7 @@ public class Panel extends JPanel {
         this.add(p5NameLabel);
         // Draw Philosophers 
         BufferedImage image = null;
-        //File file = new File("images/philosopher.png");
-        File file = new File("C:\\Users\\danie\\OneDrive\\Documents\\IWU\\CIS-425\\DiningPhilosopherv2\\DiningPhilosopher\\images\\philosopher.png");
-        //File file = new File("C:\\Users\\danie\\OneDrive\\Documents\\IWU\\CIS-425\\DiningPhilosopher\\DiningPhilosophers\\images\\philsopher.png");
+        File file = new File("DiningPhilosopher\\images\\philosopher.png");
         image = ImageIO.read(file);
         Image resultingImage = image.getScaledInstance(125, 150, Image.SCALE_DEFAULT);
         JLabel label1 = new JLabel(new ImageIcon(resultingImage));
