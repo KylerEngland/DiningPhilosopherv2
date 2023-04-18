@@ -57,7 +57,7 @@ public class SemaphorePhilosopher implements Runnable{
     private void take_forks(int i) throws InterruptedException {
         mutex.acquire();
         System.out.println("Setting p" + (i+1) + " state to Hungry");
-        randomizeTicksRemaining();
+        //randomizeTicksRemaining();
         state[i]=HUNGRY;
         setState(HUNGRY);
         test(i);
