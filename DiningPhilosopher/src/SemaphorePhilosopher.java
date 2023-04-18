@@ -83,6 +83,8 @@ public class SemaphorePhilosopher implements Runnable{
             s[i].release();
         }
     }
+
+
     private void randomizeTicksRemaining(){
         int min = 1; 
         int max = 15; 
