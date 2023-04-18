@@ -77,6 +77,9 @@ public class MonitorPhilosopher implements Runnable {
             ticksRemaining--;
             outputArea.append("Philosopher " + (i+1) + " eats and \n wants to eat for "+ ticksRemaining +" tick(s).\n");
         }
+        if(state[i]==EATING && ticksRemaining==0){
+            put_forks(i);
+        }
         
         
     }
