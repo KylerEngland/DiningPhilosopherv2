@@ -21,10 +21,14 @@ public class SemaphorePhilosopher implements Runnable{
     JTextArea outputArea;
     Semaphore mutex = new Semaphore(1);
     Semaphore[] s = new Semaphore[N];
+    
     SemaphorePhilosopher(int i, Panel panel, int ticksPerSecond, JTextArea outputArea){
         this.i=i; 
         this.ticksPerSecond = ticksPerSecond; 
-        this.outputArea = outputArea; 
+        this.outputArea = outputArea;
+        for(int index=0;index<N;index++){
+            s[index] = new Semaphore(1); 
+        }
     }
     final int LEFT = (i + N - 1)%N;
     final int RIGHT = (i + 1)%N;
@@ -61,8 +65,11 @@ public class SemaphorePhilosopher implements Runnable{
     }
     private void test(int i){
         if(state[i]==HUNGRY && state[LEFT]!=EATING && state[RIGHT]!=EATING){
+            System.out.println("Setting state to eating");
             state[i]=EATING;
+            System.out.println("Setting state to eating2");
             s[i].release();
+            System.out.println("Setting state to eating3");
         }
     }
     private void randomizeTicksRemaining(){
@@ -78,15 +85,17 @@ public class SemaphorePhilosopher implements Runnable{
         if(state[i]==THINKING){
             if(ticksRemaining==1) state[i]=HUNGRY;
             ticksRemaining--;
-            outputArea.append("Philosopher " + i + " is thinking and \n wants to think for "+ ticksRemaining +" tick(s).\n");
+            outputArea.append("Philosopher " + (i+1) + " is thinking and \n wants to think for "+ ticksRemaining +" tick(s).\n");
         }
         else if(state[i]==HUNGRY) take_forks(i);
         if(state[i]==EATING){
             ticksRemaining--;
-            outputArea.append("Philosopher " + i + " eats and \n wants to eat for "+ ticksRemaining +" tick(s).\n");
+            outputArea.append("Philosopher " + (i+1) + " eats and \n wants to eat for "+ ticksRemaining +" tick(s).\n");
         }
-        
-        
+        if(state[i]==EATING && ticksRemaining==0){
+            put_forks(i);
+        }
+
     }
     
 }
