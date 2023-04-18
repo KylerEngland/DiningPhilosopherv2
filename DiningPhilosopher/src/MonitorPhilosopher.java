@@ -16,7 +16,6 @@ public class MonitorPhilosopher implements Runnable {
     private int ticksRemaining;
     private int ticksPerSecond;
     private JTextArea outputArea;
-    private boolean running = true;
     private Panel panel;
     private ReentrantLock lock;
 
@@ -32,7 +31,6 @@ public class MonitorPhilosopher implements Runnable {
         MonitorPhilosopher.state[i] = HUNGRY;
         setState(HUNGRY);
         test(i);
-        this.notifyAll();
         if (MonitorPhilosopher.state[i] != EATING) {
             try {
                 this.wait();
@@ -48,37 +46,43 @@ public class MonitorPhilosopher implements Runnable {
         setState(THINKING);
         test(getLeft(i));
         test(getRight(i));
-        synchronized(lock){
-            lock.notifyAll();
-        }
+        // synchronized(lock){
+        //     lock.notifyAll();
+        // }
     }
 
     public synchronized void test(int i) {
         if (MonitorPhilosopher.state[i] == HUNGRY && MonitorPhilosopher.state[getLeft(i)] != EATING
                 && MonitorPhilosopher.state[getRight(i)] != EATING) {
-            synchronized(lock) {
-                if (!lock.isLocked() && !lock.hasQueuedThreads()) {
                     MonitorPhilosopher.state[i] = EATING;
+                    synchronized(lock) {
+                if (!lock.isLocked() && !lock.hasQueuedThreads()) {
                     setState(EATING);
-                    lock.lock();
+                    lock.notifyAll();
+                    // lock.lock();
                 }
             }
         }
     }
 
-    // public synchronized void test(int i) throws InterruptedException {
+    // public synchronized void test(int i) {
     //     if (MonitorPhilosopher.state[i] == HUNGRY && MonitorPhilosopher.state[getLeft(i)] != EATING
     //             && MonitorPhilosopher.state[getRight(i)] != EATING) {
+    //         // Both neighboring forks are available, so pick them up and start eating
     //         MonitorPhilosopher.state[i] = EATING;
     //         setState(EATING);
     //         lock.lock();
     //     } else {
-    //         // release the lock and wait for a signal
-    //         lock.unlock();
-    //         this.wait();
+    //         // At least one of the neighboring forks is being held, so wait for it to become available
+    //         synchronized(lock) {
+    //             try {
+    //                 lock.wait();
+    //             } catch (InterruptedException e) {
+    //                 e.printStackTrace();
+    //             }
+    //         }
     //     }
-    // }
-    
+    // }  
     
 
     private void randomizeTicksRemaining() {
@@ -116,7 +120,7 @@ public class MonitorPhilosopher implements Runnable {
     }
 
     public void run() {
-        while (running) {
+        while (true) {
             try {
                 tick();
             } catch (InterruptedException e) {
