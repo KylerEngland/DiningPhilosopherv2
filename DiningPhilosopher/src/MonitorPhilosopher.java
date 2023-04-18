@@ -6,8 +6,6 @@ public class MonitorPhilosopher implements Runnable {
 
     final int N = 5;
     int i;
-    // final int LEFT = (i + N - 1) % N;
-    // final int RIGHT = (i + 1) % N;
     final int THINKING = 0;
     final int HUNGRY = 1;
     final int EATING = 2;
