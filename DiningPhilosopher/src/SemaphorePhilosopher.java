@@ -95,7 +95,7 @@ public class SemaphorePhilosopher implements Runnable{
                 newStateString = "Eating";
                 break;
         }
-        panel.setStateText(newStateString, i);
+        panel.setStateText(newStateString, i+1);
     }
     private void tick() throws InterruptedException {
         if(ticksRemaining<=0){

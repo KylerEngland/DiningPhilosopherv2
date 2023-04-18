@@ -4,8 +4,8 @@ public class MonitorPhilosopher implements Runnable {
 
     final int N = 5;
     int i;
-    final int LEFT = (i + N - 1) % N;
-    final int RIGHT = (i + 1) % N;
+    // final int LEFT = (i + N - 1) % N;
+    // final int RIGHT = (i + 1) % N;
     final int THINKING = 0;
     final int HUNGRY = 1;
     final int EATING = 2;
@@ -28,7 +28,7 @@ public class MonitorPhilosopher implements Runnable {
         MonitorPhilosopher.state[i] = HUNGRY;
         setState(HUNGRY);
         test(i);
-        notifyAll();
+        this.notifyAll();
         if (MonitorPhilosopher.state[i] != EATING) {
             try {
                 this.wait();
@@ -39,20 +39,21 @@ public class MonitorPhilosopher implements Runnable {
     }
 
     public synchronized void put_forks(int i) {
-        System.out.println("Setting p" + i + " state to Thinking");
+        System.out.println("Setting P" + (i+1) + " state to thinking");
         MonitorPhilosopher.state[i] = THINKING;
         setState(THINKING);
-        test(LEFT);
-        test(RIGHT);
-        notifyAll();
+        test(getLeft(i));
+        test(getRight(i));
+        this.notifyAll();
     }
 
     public synchronized void test(int i) {
-        if (MonitorPhilosopher.state[i] == HUNGRY && MonitorPhilosopher.state[LEFT] != EATING
-                && MonitorPhilosopher.state[RIGHT] != EATING) {
-            System.out.println("Setting p" + i + "  state to eating");
+        if (MonitorPhilosopher.state[i] == HUNGRY && MonitorPhilosopher.state[getLeft(i)] != EATING
+                && MonitorPhilosopher.state[getRight(i)] != EATING) {
+            System.out.println("Setting P" + (i+1) + "  state to eating");
             MonitorPhilosopher.state[i] = EATING;
             setState(EATING);
+            this.notifyAll();
         }
     }
 
@@ -120,7 +121,15 @@ public class MonitorPhilosopher implements Runnable {
                 newStateString = "Eating";
                 break;
         }
-        panel.setStateText(newStateString, i);
+        panel.setStateText(newStateString, i+1);
+    }
+
+    public int getLeft(int i){
+        return (i + N - 1) % N;
+    }
+
+    public int getRight(int i){
+        return (i + 1) % N;
     }
 
 }
