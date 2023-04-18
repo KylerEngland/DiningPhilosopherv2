@@ -95,7 +95,7 @@ public class MonitorPhilosopher implements Runnable {
         if (state[i] == THINKING) {
             if (ticksRemaining == 1) {
                 state[i] = HUNGRY;
-                panel.setStateText("Hungry", i);
+                setState(HUNGRY);
             }
             ticksRemaining--;
             outputArea.append("Philosopher " + (i + 1) + " is thinking and \n wants to think for " + ticksRemaining
