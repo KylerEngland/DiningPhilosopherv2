@@ -1,3 +1,5 @@
+import java.util.concurrent.locks.ReentrantLock;
+
 import javax.swing.JTextArea;
 
 public class MonitorPhilosopher implements Runnable {
@@ -16,12 +18,14 @@ public class MonitorPhilosopher implements Runnable {
     private JTextArea outputArea;
     private boolean running = true;
     private Panel panel;
+    private ReentrantLock lock;
 
-    public MonitorPhilosopher(int i, Panel panel, int ticksPerSecond, JTextArea outputArea) {
+    public MonitorPhilosopher(int i, Panel panel, int ticksPerSecond, JTextArea outputArea, ReentrantLock lock) {
         this.i = i;
         this.panel = panel;
         this.ticksPerSecond = ticksPerSecond;
         this.outputArea = outputArea;
+        this.lock = lock;
     }
 
     public synchronized void take_forks(int i) {
@@ -44,18 +48,24 @@ public class MonitorPhilosopher implements Runnable {
         setState(THINKING);
         test(getLeft(i));
         test(getRight(i));
-        this.notifyAll();
+        synchronized(lock){
+            lock.notifyAll();
+        }
     }
 
     public synchronized void test(int i) {
         if (MonitorPhilosopher.state[i] == HUNGRY && MonitorPhilosopher.state[getLeft(i)] != EATING
                 && MonitorPhilosopher.state[getRight(i)] != EATING) {
-            System.out.println("Setting P" + (i+1) + "  state to eating");
-            MonitorPhilosopher.state[i] = EATING;
-            setState(EATING);
-            this.notifyAll();
+            synchronized(lock) {
+                if (!lock.isLocked() && !lock.hasQueuedThreads()) {
+                    MonitorPhilosopher.state[i] = EATING;
+                    setState(EATING);
+                    lock.lock();
+                }
+            }
         }
     }
+    
 
     private void randomizeTicksRemaining() {
         int min = 1;
@@ -131,5 +141,10 @@ public class MonitorPhilosopher implements Runnable {
     public int getRight(int i){
         return (i + 1) % N;
     }
+
+    public void setTicksPerSecond(int ticksPerSecond) {
+        this.ticksPerSecond = ticksPerSecond;
+    }
+    
 
 }

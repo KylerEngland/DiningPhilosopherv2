@@ -23,7 +23,7 @@ public class SemaphorePhilosopher implements Runnable{
     Semaphore mutex = new Semaphore(1);
     Semaphore[] s = new Semaphore[N];
     
-    SemaphorePhilosopher(int i, Panel panel, int ticksPerSecond, JTextArea outputArea){
+    public SemaphorePhilosopher(int i, Panel panel, int ticksPerSecond, JTextArea outputArea){
         this.i=i; 
         this.panel = panel; 
         this.ticksPerSecond = ticksPerSecond; 
@@ -118,6 +118,10 @@ public class SemaphorePhilosopher implements Runnable{
             put_forks(i);
         }
 
+    }
+
+    public void setTicksPerSecond(int ticksPerSecond) {
+        this.ticksPerSecond = ticksPerSecond;
     }
     
 }
