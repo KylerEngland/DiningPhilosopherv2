@@ -26,7 +26,7 @@ public class MonitorPhilosopher implements Runnable {
 
     public synchronized void take_forks(int i) {
         MonitorPhilosopher.state[i] = HUNGRY;
-        panel.setStateText("Hungry", i);
+        setState(HUNGRY);
         test(i);
         this.notifyAll();
         if (MonitorPhilosopher.state[i] != EATING) {
@@ -39,8 +39,9 @@ public class MonitorPhilosopher implements Runnable {
     }
 
     public synchronized void put_forks(int i) {
+        System.out.println("Setting p" + i + " state to Thinking");
         MonitorPhilosopher.state[i] = THINKING;
-        panel.setStateText("Thinking", i);
+        setState(THINKING);
         test(LEFT);
         test(RIGHT);
         this.notifyAll();
@@ -49,43 +50,46 @@ public class MonitorPhilosopher implements Runnable {
     public synchronized void test(int i) {
         if (MonitorPhilosopher.state[i] == HUNGRY && MonitorPhilosopher.state[LEFT] != EATING
                 && MonitorPhilosopher.state[RIGHT] != EATING) {
+            System.out.println("Setting p" + i + "  state to eating");
             MonitorPhilosopher.state[i] = EATING;
-            panel.setStateText("Eating", i);
+            setState(EATING);
         }
     }
 
-    private void randomizeTicksRemaining(){
-        int min = 1; 
-        int max = 15; 
+    private void randomizeTicksRemaining() {
+        int min = 1;
+        int max = 15;
         // Set the number of remaining ticks to a random number
-        ticksRemaining = (int)Math.floor(Math.random() * (max - min + 1) + min);
+        ticksRemaining = (int) Math.floor(Math.random() * (max - min + 1) + min);
     }
 
     private void tick() throws InterruptedException {
-        if(ticksRemaining<=0){
+        if (ticksRemaining <= 0) {
             randomizeTicksRemaining();
         }
-        if(state[i]==THINKING){
-            if(ticksRemaining==1) {
-                state[i]=HUNGRY;
+        if (state[i] == THINKING) {
+            if (ticksRemaining == 1) {
+                state[i] = HUNGRY;
                 panel.setStateText("Hungry", i);
             }
             ticksRemaining--;
-            outputArea.append("Philosopher " + (i+1) + " is thinking and \n wants to think for "+ ticksRemaining +" tick(s).\n");
-        } else if(state[i]==HUNGRY) {
+            outputArea.append("Philosopher " + (i + 1) + " is thinking and \n wants to think for " + ticksRemaining
+                    + " tick(s).\n");
+        } else if (state[i] == HUNGRY) {
             take_forks(i);
         }
 
-        if(state[i]==EATING){
+        if (state[i] == EATING) {
             ticksRemaining--;
-            outputArea.append("Philosopher " + (i+1) + " eats and \n wants to eat for "+ ticksRemaining +" tick(s).\n");
+            outputArea.append(
+                    "Philosopher " + (i + 1) + " eats and \n wants to eat for " + ticksRemaining + " tick(s).\n");
         }
-        if(state[i]==EATING && ticksRemaining==0){
+        if (state[i] == EATING && ticksRemaining == 0) {
             put_forks(i);
         }
-        
-        
+
     }
+
     public void run() {
         while (running) {
             try {
@@ -101,6 +105,22 @@ public class MonitorPhilosopher implements Runnable {
                 e.printStackTrace();
             }
         }
+    }
+
+    public void setState(int newState) {
+        String newStateString = "Null";
+        switch (newState) {
+            case THINKING:
+                newStateString = "Thinking";
+                break;
+            case HUNGRY:
+                newStateString = "Hungry";
+                break;
+            case EATING:
+                newStateString = "Eating";
+                break;
+        }
+        panel.setStateText(newStateString, i);
     }
 
 }

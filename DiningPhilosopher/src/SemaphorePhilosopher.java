@@ -92,7 +92,7 @@ public class SemaphorePhilosopher implements Runnable{
                 newStateString = "Hungry";
                 break;
             case EATING: 
-                newStateString = "Eatting";
+                newStateString = "Eating";
                 break;
         }
         panel.setStateText(newStateString, i);
