@@ -25,9 +25,11 @@ public class MonitorPhilosopher implements Runnable {
         this.ticksPerSecond = ticksPerSecond;
         this.outputArea = outputArea;
         this.lock = lock;
+        randomizeTicksRemaining();
     }
 
     public synchronized void take_forks(int i) {
+        randomizeTicksRemaining();
         MonitorPhilosopher.state[i] = HUNGRY;
         setState(HUNGRY);
         test(i);
@@ -41,7 +43,8 @@ public class MonitorPhilosopher implements Runnable {
     }
 
     public synchronized void put_forks(int i) {
-        System.out.println("Setting P" + (i+1) + " state to thinking");
+        System.out.println("Setting P" + (i + 1) + " state to thinking");
+        randomizeTicksRemaining();
         MonitorPhilosopher.state[i] = THINKING;
         setState(THINKING);
         test(getLeft(i));
@@ -51,35 +54,14 @@ public class MonitorPhilosopher implements Runnable {
     public synchronized void test(int i) {
         if (MonitorPhilosopher.state[i] == HUNGRY && MonitorPhilosopher.state[getLeft(i)] != EATING
                 && MonitorPhilosopher.state[getRight(i)] != EATING) {
-                    MonitorPhilosopher.state[i] = EATING;
-                    setState(EATING);
-                    synchronized(lock) {
-                if (!lock.isLocked() && !lock.hasQueuedThreads()) {
-                    lock.notifyAll();
-                }
+            MonitorPhilosopher.state[i] = EATING;
+            setState(EATING);
+            synchronized (lock) {
+                lock.notifyAll();
             }
         }
     }
 
-    // public synchronized void test(int i) {
-    //     if (MonitorPhilosopher.state[i] == HUNGRY && MonitorPhilosopher.state[getLeft(i)] != EATING
-    //             && MonitorPhilosopher.state[getRight(i)] != EATING) {
-    //         // Both neighboring forks are available, so pick them up and start eating
-    //         MonitorPhilosopher.state[i] = EATING;
-    //         setState(EATING);
-    //         lock.lock();
-    //     } else {
-    //         // At least one of the neighboring forks is being held, so wait for it to become available
-    //         synchronized(lock) {
-    //             try {
-    //                 lock.wait();
-    //             } catch (InterruptedException e) {
-    //                 e.printStackTrace();
-    //             }
-    //         }
-    //     }
-    // }  
-    
 
     private void randomizeTicksRemaining() {
         int min = 1;
@@ -88,28 +70,23 @@ public class MonitorPhilosopher implements Runnable {
         ticksRemaining = (int) Math.floor(Math.random() * (max - min + 1) + min);
     }
 
+    
     private void tick() throws InterruptedException {
-        if (ticksRemaining <= 0) {
-            randomizeTicksRemaining();
-        }
+
         if (state[i] == THINKING) {
-            if (ticksRemaining == 1) {
-                state[i] = HUNGRY;
-                setState(HUNGRY);
-            }
             ticksRemaining--;
             outputArea.append("Philosopher " + (i + 1) + " is thinking and \n wants to think for " + ticksRemaining
                     + " tick(s).\n");
-        } else if (state[i] == HUNGRY) {
-            take_forks(i);
-        }
 
+        }
+        if (state[i] == HUNGRY || (ticksRemaining <= 0 && state[i] == THINKING))
+            take_forks(i);
         if (state[i] == EATING) {
             ticksRemaining--;
             outputArea.append(
                     "Philosopher " + (i + 1) + " eats and \n wants to eat for " + ticksRemaining + " tick(s).\n");
         }
-        if (state[i] == EATING && ticksRemaining == 0) {
+        if (state[i] == EATING && ticksRemaining <= 0) {
             put_forks(i);
         }
 
@@ -145,20 +122,19 @@ public class MonitorPhilosopher implements Runnable {
                 newStateString = "Eating";
                 break;
         }
-        panel.setStateText(newStateString, i+1);
+        panel.setStateText(newStateString, i + 1);
     }
 
-    public int getLeft(int i){
+    public int getLeft(int i) {
         return (i + N - 1) % N;
     }
 
-    public int getRight(int i){
+    public int getRight(int i) {
         return (i + 1) % N;
     }
 
     public void setTicksPerSecond(int ticksPerSecond) {
         this.ticksPerSecond = ticksPerSecond;
     }
-    
 
 }
