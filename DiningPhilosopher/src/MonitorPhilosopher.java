@@ -49,7 +49,7 @@ public class MonitorPhilosopher implements Runnable {
             MonitorPhilosopher.state[i] = EATING;
         }
     }
-    
+
     private void randomizeTicksRemaining(){
         int min = 1; 
         int max = 15; 
@@ -62,11 +62,15 @@ public class MonitorPhilosopher implements Runnable {
             randomizeTicksRemaining();
         }
         if(state[i]==THINKING){
-            if(ticksRemaining==1) state[i]=HUNGRY;
+            if(ticksRemaining==1) {
+                state[i]=HUNGRY;
+            }
             ticksRemaining--;
             outputArea.append("Philosopher " + i + " is thinking and \n wants to think for "+ ticksRemaining +" tick(s).\n");
+        } else if(state[i]==HUNGRY) {
+            take_forks(i);
         }
-        else if(state[i]==HUNGRY) take_forks(i);
+
         if(state[i]==EATING){
             ticksRemaining--;
             outputArea.append("Philosopher " + i + " eats and \n wants to eat for "+ ticksRemaining +" tick(s).\n");
