@@ -65,6 +65,20 @@ public class MonitorPhilosopher implements Runnable {
             }
         }
     }
+
+    // public synchronized void test(int i) throws InterruptedException {
+    //     if (MonitorPhilosopher.state[i] == HUNGRY && MonitorPhilosopher.state[getLeft(i)] != EATING
+    //             && MonitorPhilosopher.state[getRight(i)] != EATING) {
+    //         MonitorPhilosopher.state[i] = EATING;
+    //         setState(EATING);
+    //         lock.lock();
+    //     } else {
+    //         // release the lock and wait for a signal
+    //         lock.unlock();
+    //         this.wait();
+    //     }
+    // }
+    
     
 
     private void randomizeTicksRemaining() {
