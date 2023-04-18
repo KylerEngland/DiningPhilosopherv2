@@ -28,7 +28,7 @@ public class MonitorPhilosopher implements Runnable {
         MonitorPhilosopher.state[i] = HUNGRY;
         setState(HUNGRY);
         test(i);
-        this.notifyAll();
+        notifyAll();
         if (MonitorPhilosopher.state[i] != EATING) {
             try {
                 this.wait();
@@ -44,7 +44,7 @@ public class MonitorPhilosopher implements Runnable {
         setState(THINKING);
         test(LEFT);
         test(RIGHT);
-        this.notifyAll();
+        notifyAll();
     }
 
     public synchronized void test(int i) {
