@@ -9,6 +9,8 @@ import java.awt.event.*;
 public class Frame extends JFrame {
     // Philosopher[] philosophers = new Philosopher[6];
     Vector<MonitorPhilosopher> monitorPhilosophers = new Vector<>(6);
+    SemaphorePhilosopher[] semPhilosophers = new SemaphorePhilosopher[5];
+    int State[] = new int[5];
     String dinnerMode;
 
     public Frame() throws IOException {
@@ -74,21 +76,34 @@ public class Frame extends JFrame {
                 }
                 return renderer;
             }
-        });
+        }); 
+        // String[] options = { "Select number of ticks per second", "1", "3", "5", "10"
+        // };
+        String[] options = { "1", "3", "5", "10" };
+        JComboBox<String> ticksPerSecondDropdown = new JComboBox<>(options);
         // Add an ActionListener to the JComboBox
+        String selectedValue = (String) ticksPerSecondDropdown.getSelectedItem();
+        int selectedInt = Integer.parseInt(selectedValue);
+        // Create the output area and add it to the frame
+        JTextArea outputArea = new JTextArea();
+        outputArea.setEditable(false);
         dinnerTypes.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String selectedOption = (String) dinnerTypes.getSelectedItem();
                 System.out.println("User selected: " + selectedOption);
                 dinnerMode = selectedOption;
+                for (int index = 0; index < 5; index++) {
+                         if (dinnerMode == "Monitor Dinner") {
+                            // monitorPhilosophers.add(index, new MonitorPhilosopher(index, panel, outputArea, selectedInt, this));
+                         } else if (dinnerMode == "Semaphore Dinner") {
+                             semPhilosophers[index] = new SemaphorePhilosopher(index, panel, selectedInt, outputArea);
+                         }
+                    }
             }
         });
 
-        // String[] options = { "Select number of ticks per second", "1", "3", "5", "10"
-        // };
-        String[] options = { "1", "3", "5", "10" };
-        JComboBox<String> ticksPerSecondDropdown = new JComboBox<>(options);
+       
 
         // ticksPerSecondDropdown.setSelectedItem("Select number of ticks per second");
         // // Set the initial value as selected but not selectable
@@ -111,9 +126,7 @@ public class Frame extends JFrame {
                 return renderer;
             }
         });
-        // Create the output area and add it to the frame
-        JTextArea outputArea = new JTextArea();
-        outputArea.setEditable(false);
+        
 
         // Create a JScrollPane and add the output area to it
         JScrollPane scrollPane = new JScrollPane(outputArea);
@@ -130,8 +143,8 @@ public class Frame extends JFrame {
 
         // Create the 5 Philosophers
         panel.setLayout(null);
-        String selectedValue = (String) ticksPerSecondDropdown.getSelectedItem();
-        int selectedInt = Integer.parseInt(selectedValue);
+        // String selectedValue = (String) ticksPerSecondDropdown.getSelectedItem();
+        // int selectedInt = Integer.parseInt(selectedValue);
         // for (int index = 1; index <= 5; index++) {
         //     if (dinnerMode == "Monitor Dinner") {
         //         monitorPhilosophers.add(index, new MonitorPhilosopher(index, panel, outputArea, selectedInt, this));
@@ -140,10 +153,19 @@ public class Frame extends JFrame {
         //     }
         // }
 
-        Thread threads[] = new Thread[6];
+        Thread threads[] = new Thread[5];
 
         startButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                for (int index = 0; index < 5; index++) {
+                    if (dinnerMode == "Monitor Dinner") {
+                        threads[index] = new Thread(monitorPhilosophers.get(index));
+                        threads[index].start();
+                    } else if (dinnerMode == "Semaphore Dinner") {
+                        threads[index] = new Thread(semPhilosophers[index]);
+                        threads[index].start();
+                    }
+                }
 
                 // for (int index = 1; index <= 5; index++) {
                 //     if (dinnerMode == "Monitor Dinner") {
@@ -159,7 +181,7 @@ public class Frame extends JFrame {
         stopButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 // Thread threads[] = new Thread[6];
-                for (int index = 1; index <= 5; index++) {
+                for (int index = 0; index < 5; index++) {
                     threads[index].stop();
                 }
             }
@@ -173,4 +195,8 @@ public class Frame extends JFrame {
     // public Fork getFork(int index) {
     //     return forks[index];
     // }
+
+    public SemaphorePhilosopher getSemaphorePhilosopher(int i) {
+        return semPhilosophers[i]; 
+    }
 }
