@@ -26,6 +26,7 @@ public class MonitorPhilosopher implements Runnable {
 
     public synchronized void take_forks(int i) {
         MonitorPhilosopher.state[i] = HUNGRY;
+        panel.setStateText("Hungry", i);
         test(i);
         this.notifyAll();
         if (MonitorPhilosopher.state[i] != EATING) {
@@ -38,7 +39,8 @@ public class MonitorPhilosopher implements Runnable {
     }
 
     public synchronized void put_forks(int i) {
-        state[i] = THINKING;
+        MonitorPhilosopher.state[i] = THINKING;
+        panel.setStateText("Thinking", i);
         test(LEFT);
         test(RIGHT);
         this.notifyAll();
@@ -48,6 +50,7 @@ public class MonitorPhilosopher implements Runnable {
         if (MonitorPhilosopher.state[i] == HUNGRY && MonitorPhilosopher.state[LEFT] != EATING
                 && MonitorPhilosopher.state[RIGHT] != EATING) {
             MonitorPhilosopher.state[i] = EATING;
+            panel.setStateText("Eating", i);
         }
     }
 
