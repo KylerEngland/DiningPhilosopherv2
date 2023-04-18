@@ -15,10 +15,11 @@ public class MonitorPhilosopher implements Runnable {
     private int ticksPerSecond;
     private JTextArea outputArea;
     private boolean running = true;
+    private Panel panel;
 
-    public MonitorPhilosopher(int i, int ticksRemaining, int ticksPerSecond, JTextArea outputArea) {
+    public MonitorPhilosopher(int i, Panel panel, int ticksPerSecond, JTextArea outputArea) {
         this.i = i;
-        this.ticksRemaining = ticksRemaining;
+        this.panel = panel;
         this.ticksPerSecond = ticksPerSecond;
         this.outputArea = outputArea;
     }
@@ -64,6 +65,7 @@ public class MonitorPhilosopher implements Runnable {
         if(state[i]==THINKING){
             if(ticksRemaining==1) {
                 state[i]=HUNGRY;
+                panel.setStateText("hungry", i);
             }
             ticksRemaining--;
             outputArea.append("Philosopher " + i + " is thinking and \n wants to think for "+ ticksRemaining +" tick(s).\n");

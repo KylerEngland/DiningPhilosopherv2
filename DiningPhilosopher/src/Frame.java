@@ -77,8 +77,7 @@ public class Frame extends JFrame {
                 return renderer;
             }
         }); 
-        // String[] options = { "Select number of ticks per second", "1", "3", "5", "10"
-        // };
+
         String[] options = { "1", "3", "5", "10" };
         JComboBox<String> ticksPerSecondDropdown = new JComboBox<>(options);
         // Add an ActionListener to the JComboBox
@@ -95,7 +94,7 @@ public class Frame extends JFrame {
                 dinnerMode = selectedOption;
                 for (int index = 0; index < 5; index++) {
                          if (dinnerMode == "Monitor Dinner") {
-                            // monitorPhilosophers.add(index, new MonitorPhilosopher(index, panel, outputArea, selectedInt, this));
+                            monitorPhilosophers.add(index, new MonitorPhilosopher(index, panel, selectedInt, outputArea));
                          } else if (dinnerMode == "Semaphore Dinner") {
                              semPhilosophers[index] = new SemaphorePhilosopher(index, panel, selectedInt, outputArea);
                          }
@@ -136,10 +135,6 @@ public class Frame extends JFrame {
 
         // Add the scroll pane to the frame
         this.add(scrollPane, BorderLayout.EAST);
-        // Create 5 Forks
-        // for (int index = 0; index < 5; index++) {
-        //     forks[index] = new Fork();
-        // }
 
         // Create the 5 Philosophers
         panel.setLayout(null);
@@ -166,16 +161,6 @@ public class Frame extends JFrame {
                         threads[index].start();
                     }
                 }
-
-                // for (int index = 1; index <= 5; index++) {
-                //     if (dinnerMode == "Monitor Dinner") {
-                //         threads[index] = new Thread(monitorPhilosophers.get(index));
-                //         threads[index].start();
-                //     } else if (dinnerMode == "Semaphore Dinner") {
-                //         threads[index] = new Thread(philosophers[index]);
-                //         threads[index].start();
-                //     }
-                // }
             }
         });
         stopButton.addActionListener(new ActionListener() {
@@ -191,10 +176,6 @@ public class Frame extends JFrame {
         toolbar.add(dinnerTypes);
         this.add(panel);
     }
-
-    // public Fork getFork(int index) {
-    //     return forks[index];
-    // }
 
     public SemaphorePhilosopher getSemaphorePhilosopher(int i) {
         return semPhilosophers[i]; 
