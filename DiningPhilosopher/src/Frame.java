@@ -3,13 +3,11 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.io.IOException;
-import java.util.Vector;
 import java.util.concurrent.locks.ReentrantLock;
 import java.awt.event.*;
 
 public class Frame extends JFrame {
-    // Philosopher[] philosophers = new Philosopher[6];
-    // Vector<MonitorPhilosopher> monitorPhilosophers = new Vector<>(5);
+
     SemaphorePhilosopher[] semPhilosophers = new SemaphorePhilosopher[5];
     int State[] = new int[5];
     String dinnerMode;
@@ -117,8 +115,6 @@ public class Frame extends JFrame {
                 dinnerMode = selectedOption;
                 for (int index = 0; index < 5; index++) {
                     if (dinnerMode == "Monitor Dinner") {
-                        // monitorPhilosophers.add(index, new MonitorPhilosopher(index, panel,
-                        // selectedInt, outputArea));
                         mPhilosophers[index] = new MonitorPhilosopher(index, panel, selectedInt, outputArea, forks[index]);
                     } else if (dinnerMode == "Semaphore Dinner") {
                         semPhilosophers[index] = new SemaphorePhilosopher(index, panel, selectedInt, outputArea);
@@ -195,7 +191,6 @@ public class Frame extends JFrame {
                 }
                 for (int index = 0; index < 5; index++) {
                     if (dinnerMode == "Monitor Dinner") {
-                        // threads[index] = new Thread(monitorPhilosophers.get(index));
                         threads[index] = new Thread(mPhilosophers[index]);                       
                         threads[index].start();
                     } else if (dinnerMode == "Semaphore Dinner") {
